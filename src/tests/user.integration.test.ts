@@ -26,7 +26,14 @@ describe('User API Tests', () => {
       email:"testUser@aueb.gr",
       roles:[]});
     // console.log("USER>>>>>", user);
-    const payload = { username: user.username, email:user.email, roles: user.roles};
+    const payload = { username: user.username, email:user.email, roles: [
+      {
+        role: "READER",
+        description: "Default Role",
+        active: true
+      }
+    ]
+  };
     // console.log("PAYLOAD>>>>", payload);
     // console.log("JWT_SECRET", JWT_SECRET);
     token = jwt.sign(payload, JWT_SECRET, {expiresIn:'1h'});
@@ -48,9 +55,33 @@ describe('User API Tests', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({username:"user1", password:"123456"});
       
-      console.log("POST>>>>", res.status, res.body);
+      // console.log(res.status, res.body);
       expect(res.status).toBe(201);
       expect(res.body.status).toBe(true);
-  })
+  });
+
+  test('POST /users -> create a user with wrong password', async() => {
+    const res = await server.request.post('/users')
+      .set('Authorization', `Bearer ${token}`)
+      .send({username:"user2", password:"1234"});
+
+      expect(res.status).toBe(400);
+  });
+
+  test('POST /users -> create a user with wrong username', async() => {
+    const res = await server.request.post('/users')
+      .set('Authorization', `Bearer ${token}`)
+      .send({username:"us", password:"123456"});
+
+      expect(res.status).toBe(400);
+  });
+
+  test('POST /users -> create a user that already exists', async() => {
+    const res = await server.request.post('/users')
+      .set('Authorization', `Bearer ${token}`)
+      .send({username:"user1", password:"123456"});
+
+      expect(res.status).not.toBe(201);
+  });
 
 })
