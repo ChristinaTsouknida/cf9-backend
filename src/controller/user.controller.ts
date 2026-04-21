@@ -13,7 +13,15 @@ export const getAll = async(req: Request, res: Response, next: NextFunction) => 
 
 export const getOneByEmail = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const email:string = req.params.email;
+    // const email:string = req.params.email;
+    const emailParam = req.params.email;
+
+    if (typeof emailParam !== "string") {
+      return res.status(400).json({message: "Invalid email parameter"});
+    }
+    
+    const email:string = emailParam;
+
     const result = await userService.findUserByEmail(email);
     if (!result) 
       return res.status(404).json({message: "User not found by email"});
@@ -35,7 +43,15 @@ export const create = async(req:Request, res:Response, next:NextFunction) => {
 
 export const update = async(req:Request, res:Response, next:NextFunction) => {
   try {
-    const username:string = req.params.username;
+    // const username:string = req.params.username;
+    const usernameParam = req.params.username;
+
+    if (typeof usernameParam !== "string") {
+      return res.status(400).json({message: "Invalid username parameter"})
+    }
+
+    const username: string = usernameParam;
+
     const data:UpdateUserDTO = req.body;
     const result = await userService.updateUser(username, data);
     if (!result) 

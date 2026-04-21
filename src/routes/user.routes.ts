@@ -13,7 +13,7 @@ const router = Router();
  *  get:
  *    summary: Returns all users
  *    tags: [Users]
- *    responses:  
+ *    responses:
  *      200:
  *        description: Returns all users
  */
@@ -32,11 +32,10 @@ router.get('/', userCtrl.getAll);
  *        schema: 
  *          type: string
  *    responses:
- *      200:
- *        description: Returns user by email
+ *      200: 
+ *        description: Return user by email
  *      404:
- *        description: User not found by email
- * 
+ *        description: User not found by email 
  */
 router.get('/email/:email', userCtrl.getOneByEmail);
 
@@ -52,7 +51,7 @@ router.get('/email/:email', userCtrl.getOneByEmail);
  *      required: true
  *      content:
  *        application/json:
- *          schema:
+ *          schema: 
  *            type: object
  *            properties:
  *              username:
@@ -67,7 +66,8 @@ router.get('/email/:email', userCtrl.getOneByEmail);
  *                type: string
  *    responses:
  *      201:
- *        description: User created
+ *        description: User created 
+ * 
  */
 router.post('/',authenticate, hasReaderRole, validate(createUserSchema), userCtrl.create);
 router.put('/:username', userCtrl.update);
