@@ -13,12 +13,6 @@
     "test": "jest --runInBand --detectOpenHandles",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
   },
-  "jest": {
-    "collectCoverage": true,
-    "coveragePathIgnorePatterns": [
-      "/node_modules"
-    ]
-  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "dotenv": "^17.4.2",
