@@ -18,6 +18,7 @@ export class TestServer {
   async start() {
     this.mongoServer = await MongoMemoryServer.create();
     const uri = this.mongoServer.getUri();
+    console.log("URI", uri);
     await mongoose.connect(uri)
   }
 
