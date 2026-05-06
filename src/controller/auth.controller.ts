@@ -15,6 +15,7 @@ export const login = async(req: Request, res:Response, next: NextFunction) => {
 export const googleLogin = async(req: Request, res: Response, next: NextFunction) => {
   try {
     const {token} = req.body;
+    console.log(req.body);
     const result = await authService.googleLogin(token);
     if (!result) 
       return res.status(401).json({status: false, message: result});
