@@ -26,9 +26,39 @@ export const googleLogin = async(idToken: string) => {
     }
 
     const googleUser = await verifyGoogleIdToken(idToken);
+
+    if (!googleUser.email_verified) {
+      return {status: false, message: "Email not verified"}
+    }
+
+    let user = await User.findOne({email: googleUser.email});
+
+    if(!user) {
+      // We must create GoogleUser model not user
+      // user = new GoogleUser({
+      //   username: googleUser.email,
+      //   email: googleUser.email,
+      //   name: googleUser.name,
+      //   photoUrl: googleUser.picture
+      // })
+      // await user.save();
+      console.log("User not exist", googleUser.email);
+    }
+
+    const token = jwt.sign({
+      userId: googleUser.sub,
+      email: googleUser.email,
+      name: googleUser.name,
+      photoUrl: googleUser.picture,
+      roles:[{role: "READER", description: "From Google", active: true}]
+    },
+    process.env.JWT_SECRET as string,
+    {expiresIn: '1h'}
+  )
+  return {status: true, token}
     
   } catch (err) {
     console.log("Error in google auth", err);
-    return {status: false, message: "Invalid Google Token"};
+    return {status: false, message: "Invalid Google Token"}
   }
 }
